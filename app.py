@@ -6,6 +6,7 @@ import re
 import random
 from datetime import datetime
 
+# Safe imports for extraction tools
 try:
     import pdfplumber
 except ImportError:
@@ -15,12 +16,14 @@ try:
 except ImportError:
     docx2txt = None
 
+# 1. Page Configuration
 st.set_page_config(
-    page_title="🌟 CV Screening Pro – GlobalInternet.py",
+    page_title="🎯 CV Screening Pro – GlobalInternet.py",
     page_icon="🎯",
     layout="wide"
 )
 
+# 2. Heavy-Duty Cartoon Aesthetic Custom CSS Styles
 st.markdown(
     """
     <style>
@@ -28,344 +31,290 @@ st.markdown(
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
-    @keyframes floatStar {
-        0% { transform: translateY(0px) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(-80px) rotate(30deg); opacity: 0; }
-    }
-    @keyframes bouncePointer {
-        0%, 100% { transform: translateX(0); }
-        50% { transform: translateX(15px); }
-    }
-    @keyframes glow {
-        0% { box-shadow: 0 0 5px gold; }
-        50% { box-shadow: 0 0 25px #ffaa33; }
-        100% { box-shadow: 0 0 5px gold; }
-    }
-    .spinning-star {
-        position: absolute;
-        font-size: 28px;
-        animation: spin 3s linear infinite;
-        z-index: 10;
-    }
-    .floating-star {
-        position: absolute;
-        font-size: 22px;
-        animation: floatStar 5s ease-in infinite;
-        pointer-events: none;
-        z-index: 5;
-    }
-    .pointing-hand {
-        position: absolute;
-        font-size: 45px;
-        animation: bouncePointer 1.5s infinite;
-        z-index: 20;
-        filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
+    @keyframes pulseGlow {
+        0% { box-shadow: 0 0 10px #ffcc00; transform: scale(1); }
+        50% { box-shadow: 0 0 30px #ff3300; transform: scale(1.02); }
+        100% { box-shadow: 0 0 10px #ffcc00; transform: scale(1); }
     }
     .stApp {
-        background: radial-gradient(circle at 10% 20%, #ff9a3c, #ff4d4d, #2b2b2b);
-        position: relative;
-        overflow-x: hidden;
+        background: radial-gradient(circle at 50% 50%, #222222, #111111);
+        color: #ffffff !important;
     }
-    .job-card, .info-card {
-        background: rgba(0,0,0,0.6) !important;
-        backdrop-filter: blur(8px);
-        border: 2px solid gold;
-        border-radius: 25px;
-        padding: 1rem;
-        transition: transform 0.3s, box-shadow 0.3s;
-        animation: glow 2s infinite;
-    }
-    .job-card:hover, .info-card:hover {
-        transform: scale(1.02);
-    }
-    .stButton button {
-        background: linear-gradient(90deg, #ffcc00, #ff9900) !important;
-        color: #1e1e1e !important;
-        font-weight: bold;
-        border-radius: 50px !important;
-        border: none;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        transition: 0.2s;
-    }
-    .stButton button:hover {
-        transform: scale(1.05);
-        background: linear-gradient(90deg, #ffdd55, #ffaa22) !important;
-        color: black !important;
-    }
-    h1, h2, h3, p, div, span, label, .stMarkdown {
-        color: white !important;
-        text-shadow: 1px 1px 2px black;
+    .main-ad-card {
+        background: linear-gradient(145deg, rgba(255, 153, 0, 0.15), rgba(255, 51, 0, 0.15)) !important;
+        backdrop-filter: blur(12px);
+        border: 3px dashed #ffcc00;
+        border-radius: 30px;
+        padding: 2.5rem;
+        margin: 20px auto;
+        animation: pulseGlow 4s infinite ease-in-out;
+        text-align: center;
     }
     .badge-cartoon {
-        background: #ffcc00;
-        color: #1e1e1e;
-        border-radius: 30px;
-        padding: 5px 15px;
+        background: #ffcc00 !important;
+        color: #111111 !important;
+        border-radius: 40px;
+        padding: 8px 20px;
         display: inline-block;
-        font-weight: bold;
-        font-size: 1.2rem;
-        margin: 5px;
-        box-shadow: 0 0 10px gold;
+        font-weight: 900;
+        font-size: 1.1rem;
+        margin: 8px;
+        box-shadow: 0 5px 0px #cc9900;
+        text-transform: uppercase;
     }
-    .sidebar .stSidebar {
-        background: rgba(0,0,0,0.7);
+    .premium-price-tag {
+        font-size: 3.5rem !important;
+        font-weight: 900 !important;
+        color: #ffcc00 !important;
+        text-shadow: 3px 3px 0px #ff3300, 5px 5px 0px #000;
+        margin: 15px 0;
     }
-    footer {
+    .stButton button {
+        background: linear-gradient(90deg, #ffcc00, #ff6600) !important;
+        color: #000000 !important;
+        font-weight: 900 !important;
+        font-size: 1.3rem !important;
+        border-radius: 50px !important;
+        border: 3px solid #ffffff !important;
+        box-shadow: 0 8px 0px #cc4400 !important;
+        padding: 12px 35px !important;
+        transition: all 0.1s ease-in-out;
+    }
+    .stButton button:hover {
+        transform: translateY(3px) !important;
+        box-shadow: 0 4px 0px #cc4400 !important;
+        background: linear-gradient(90deg, #ffea00, #ff3300) !important;
+    }
+    h1, h2, h3, h4, p, span, label {
+        color: #ffffff !important;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        font-family: 'Arial Black', Gadget, sans-serif;
+    }
+    .sidebar-brand {
         text-align: center;
-        margin-top: 2rem;
-        font-size: 0.8rem;
+        background: rgba(0,0,0,0.4);
+        padding: 15px;
+        border-radius: 20px;
+        border: 2px solid #ff9900;
     }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-def add_stars_and_pointers():
-    spin_positions = [(5, 15), (90, 10), (15, 80), (85, 70), (45, 5)]
-    for i, (x, y) in enumerate(spin_positions):
-        st.markdown(f'<div class="spinning-star" style="left: {x}%; top: {y}%; animation-delay: {i}s;">⭐</div>', unsafe_allow_html=True)
-    for _ in range(12):
-        left = random.randint(2, 95)
-        top = random.randint(2, 90)
-        dur = random.uniform(3, 7)
-        st.markdown(f'<div class="floating-star" style="left: {left}%; top: {top}%; animation-duration: {dur}s;">🌟</div>', unsafe_allow_html=True)
-    pointer_positions = [(20, 50), (75, 30), (50, 80)]
-    for (x, y) in pointer_positions:
-        st.markdown(f'<div class="pointing-hand" style="left: {x}%; top: {y}%;">👉</div>', unsafe_allow_html=True)
-
-add_stars_and_pointers()
-
+# 3. Handle Session State Initialization
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 if "job_positions" not in st.session_state:
     st.session_state.job_positions = pd.DataFrame({
         "id": [1, 2],
         "title": ["Senior Python Developer", "Data Scientist"],
-        "description": ["Build web apps with Streamlit", "Analyse data and build ML models"],
+        "description": ["Build web apps with Streamlit and robust APIs", "Analyze big data structures and train ML models"],
         "required_skills": ["Python,Streamlit,API", "Python,SQL,Machine Learning"],
         "min_experience": [3, 2]
     })
 if "applications" not in st.session_state:
     st.session_state.applications = pd.DataFrame(columns=["applicant_name", "email", "job_title", "score", "cv_text_preview", "date"])
 
-def extract_text_from_pdf(file_bytes):
-    if pdfplumber is None:
-        return "PDF extraction not available."
-    try:
-        with pdfplumber.open(io.BytesIO(file_bytes)) as pdf:
-            text = ""
-            for page in pdf.pages:
-                text += page.extract_text() or ""
-        return text
-    except:
-        return ""
-
-def extract_text_from_docx(file_bytes):
-    if docx2txt is None:
-        return "DOCX extraction not available."
-    try:
-        import tempfile
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as tmp:
-            tmp.write(file_bytes)
-            tmp_path = tmp.name
-        text = docx2txt.process(tmp_path)
-        os.unlink(tmp_path)
-        return text
-    except:
-        return ""
-
-def extract_text_from_txt(file_bytes):
+# --- CORE UTILITY FUNCTIONS ---
+def extract_cv_text(uploaded_file):
+    file_bytes = uploaded_file.getvalue()
+    if uploaded_file.type == "application/pdf" and pdfplumber is not None:
+        try:
+            with pdfplumber.open(io.BytesIO(file_bytes)) as pdf:
+                return "".join([page.extract_text() or "" for page in pdf.pages])
+        except: return ""
+    elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" and docx2txt is not None:
+        try:
+            import tempfile
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as tmp:
+                tmp.write(file_bytes)
+                tmp_path = tmp.name
+            text = docx2txt.process(tmp_path)
+            os.unlink(tmp_path)
+            return text
+        except: return ""
     try:
         return file_bytes.decode("utf-8")
     except:
-        return ""
-
-def extract_cv_text(uploaded_file):
-    file_bytes = uploaded_file.getvalue()
-    if uploaded_file.type == "application/pdf":
-        return extract_text_from_pdf(file_bytes)
-    elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-        return extract_text_from_docx(file_bytes)
-    elif uploaded_file.type == "text/plain":
-        return extract_text_from_txt(file_bytes)
-    else:
-        return "Unsupported file type."
+        return "Unsupported or unreadable format."
 
 def compute_match_score(cv_text, job_skills, job_description):
     cv_lower = cv_text.lower()
-    skills_list = [s.strip().lower() for s in job_skills.split(",")]
-    matches = sum(1 for skill in skills_list if skill in cv_lower)
-    skill_score = (matches / len(skills_list)) * 100 if skills_list else 50
-    desc_keywords = re.findall(r'\b\w{4,}\b', job_description.lower())
-    desc_matches = sum(1 for kw in desc_keywords if kw in cv_lower)
-    desc_score = (desc_matches / max(len(desc_keywords), 1)) * 100
+    skills = [s.strip().lower() for s in job_skills.split(",") if s.strip()]
+    matches = sum(1 for skill in skills if skill in cv_lower)
+    skill_score = (matches / len(skills)) * 100 if skills else 50
+    keywords = re.findall(r'\b\w{4,}\b', job_description.lower())
+    kw_matches = sum(1 for kw in keywords if kw in cv_lower)
+    desc_score = (kw_matches / max(len(keywords), 1)) * 100
     return round(skill_score * 0.7 + desc_score * 0.3, 2)
 
-def login():
-    col1, col2, col3 = st.columns([1,2,1])
-    with col2:
-        st.markdown('<div style="text-align: center; font-size: 80px;">🎯👔🎯</div>', unsafe_allow_html=True)
-        st.markdown("<h1 style='text-align:center;'>🌟 Applicant CV Screening Pro 🌟</h1>", unsafe_allow_html=True)
-        st.markdown("<p style='text-align:center; font-size:1.2rem;'>The smartest recruitment assistant – powered by AI matching</p>", unsafe_allow_html=True)
-        st.markdown("---")
-        st.markdown("<div style='text-align:center;'><span class='badge-cartoon'>🎉 HR Superpower 🎉</span> <span class='badge-cartoon'>⚡ Instant Scoring ⚡</span> <span class='badge-cartoon'>📄 PDF/DOCX Support</span></div>", unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-        password = st.text_input("🔐 Enter Admin Password", type="password")
-        if st.button("🚀 Unlock the Magic"):
-            if password == "20082010":
-                st.session_state.authenticated = True
-                st.rerun()
-            else:
-                st.error("❌ Wrong password. (Hint: try 20082010)")
 
-def main_app():
+# --- INTERFACE ONE: POWERFUL SALES AD & GATEWAY ---
+def show_powerful_sales_ad():
+    col1, col2, col3 = st.columns([1, 6, 1])
+    with col2:
+        st.markdown("<br><br>", unsafe_allow_html=True)
+        st.markdown(
+            """
+            <div class="main-ad-card">
+                <div style="font-size: 90px; margin-bottom: 10px;">⚡🎯🤖</div>
+                <h1 style="font-size: 3rem; margin: 0; color: #ffcc00 !important;">GLOBALINTERNET.PY PRESENTS</h1>
+                <h2 style="font-size: 2.2rem; color: #ffffff; margin-top: 5px;">Applicant CV Screening Pro v2.0</h2>
+                <p style="font-size: 1.3rem; max-width: 750px; margin: 15px auto; color: #ddd !important;">
+                    Stop drowning in stacks of resumes. Instantly scan, score, parse, and match applicants to your active job vacancies with our military-grade Python extraction system.
+                </p>
+                <div style="margin: 25px 0;">
+                    <span class="badge-cartoon">⚡ ZERO SUBSCRIPTIONS</span>
+                    <span class="badge-cartoon">🔥 100% SOURCE CODE INCLUDED</span>
+                    <span class="badge-cartoon">🚀 UNLIMITED CV SCANS</span>
+                    <span class="badge-cartoon">📥 EXPORT TO EXCEL/CSV</span>
+                </div>
+                <hr style="border: 1px dashed #ff9900; margin: 30px 0;">
+                <h3 style="margin-bottom: 0px; letter-spacing: 1px;">OWN THE LIFETIME LICENSE TODAY</h3>
+                <div class="premium-price-tag">$299 USD</div>
+                <p style="font-size: 1.1rem; color: #ffcc00 !important; font-weight: bold;">One-Time Payment • Full Updates • Instant Local Setup</p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+        
+        # Centered Administrative Gateway Barrier
+        st.markdown("<br>", unsafe_allow_html=True)
+        with st.container():
+            st.markdown("<h3 style='text-align: center; color: #ffcc00 !important;'>🔐 Enter Admin Key to Launch Core System</h3>", unsafe_allow_html=True)
+            pass_col1, pass_col2, pass_col3 = st.columns([1, 2, 1])
+            with pass_col2:
+                password = st.text_input("", type="password", placeholder="Enter authorization key...", label_visibility="collapsed")
+                st.markdown("<div style='text-align: center; margin-top: 15px;'>", unsafe_allow_html=True)
+                if st.button("🚀 UNLOCK THE ENGINE"):
+                    if password == "20082010":
+                        st.session_state.authenticated = True
+                        st.rerun()
+                    else:
+                        st.error("❌ Invalid License Activation Key. (Hint: 20082010)")
+                st.markdown("</div>", unsafe_allow_html=True)
+
+
+# --- INTERFACE TWO: THE WORKHORSE DASHBOARD ---
+def show_main_dashboard():
+    # Structural Sidebar Configuration
     with st.sidebar:
-        st.markdown('<div style="text-align:center; font-size:70px; animation: spin 3s linear infinite;">🤖</div>', unsafe_allow_html=True)
-        st.markdown("### 🚀 GlobalInternet.py")
-        st.markdown("**Gesner Deslandes** – *Engineer in Chief, Founder*")
+        st.markdown(
+            """
+            <div class="sidebar-brand">
+                <span style="font-size: 60px;">🤖</span>
+                <h3 style="margin: 10px 0 5px 0; color: #ffcc00 !important;">GlobalInternet.py</h3>
+                <p style="font-size: 0.9rem; margin: 0; font-weight: bold;">Gesner Deslandes</p>
+                <p style="font-size: 0.8rem; color: #bbb !important; margin: 0;">Engineer in Chief & Founder</p>
+            </div>
+            """, 
+            unsafe_allow_html=True
+        )
         st.markdown("---")
-        st.markdown("📧 deslandes78@gmail.com")
-        st.markdown("📞 (509) 4738-5663")
-        st.markdown("[🌐 Visit Website](https://globalinternetsitepy-abh7v6tnmskxxnuplrdcgk.streamlit.app/)")
+        st.markdown("### 📞 Instant Contact")
+        st.markdown("📧 **deslandes78@gmail.com**")
+        st.markdown("📱 **(509) 4738-5663**")
+        st.markdown("[🌐 Main Commercial Suite](https://globalinternetsitepy-abh7v6tnmskxxnuplrdcgk.streamlit.app/)")
         st.markdown("---")
-        st.markdown("**Recruitment Tool v2.0** ✨")
-        if st.button("🔓 Logout"):
+        if st.button("🔒 Lock Console"):
             st.session_state.authenticated = False
             st.rerun()
 
-    st.markdown('<div style="text-align:center;"><span style="font-size:50px;">⭐</span> <span style="font-size:60px;">👔</span> <span style="font-size:50px;">⭐</span></div>', unsafe_allow_html=True)
-    st.title("🎯 Applicant CV Screening Software")
-    st.markdown("<p style='font-size:1.3rem; text-align:center;'>✨ <strong>Automated screening – match candidates to jobs in seconds</strong> ✨</p>", unsafe_allow_html=True)
+    # Content Headers
+    st.title("🎯 Recruitment Command Center")
+    st.markdown("### Automated parsing & matching pipeline active.")
     st.markdown("---")
 
-    tabs = st.tabs(["📌 Job Positions", "📝 Screen CV", "📊 Applications", "📧 Email Integration"])
+    tabs = st.tabs(["📌 Job Vacancies", "📝 Screen Candidates", "📊 Analytics & Reports", "📧 System Integrations"])
     
+    # TAB 1: JOB VACANCY ENGINE
     with tabs[0]:
-        st.subheader("📋 Manage Job Positions")
-        col1, col2 = st.columns([2,1])
-        with col1:
-            with st.expander("➕ Add New Position (click here)"):
-                new_title = st.text_input("Job Title")
-                new_desc = st.text_area("Job Description")
-                new_skills = st.text_input("Required Skills (comma separated)")
-                new_exp = st.number_input("Minimum Experience (years)", min_value=0, step=1)
-                if st.button("➕ Add Position"):
+        st.subheader("📋 Core Structural Openings")
+        col_left, col_right = st.columns([2,1])
+        with col_left:
+            with st.expander("➕ Provision New Position Profile"):
+                new_title = st.text_input("Official Title")
+                new_desc = st.text_area("Scope of Operations / Description")
+                new_skills = st.text_input("Target Skills Matrix (Comma Separated Keyphrases)")
+                new_exp = st.number_input("Minimum Experience Threshold (Years)", min_value=0, step=1)
+                if st.button("💾 Deploy Position"):
                     if new_title and new_desc:
                         new_id = len(st.session_state.job_positions) + 1
                         new_row = pd.DataFrame({
-                            "id": [new_id],
-                            "title": [new_title],
-                            "description": [new_desc],
-                            "required_skills": [new_skills],
-                            "min_experience": [new_exp]
+                            "id": [new_id], "title": [new_title], "description": [new_desc],
+                            "required_skills": [new_skills], "min_experience": [new_exp]
                         })
                         st.session_state.job_positions = pd.concat([st.session_state.job_positions, new_row], ignore_index=True)
-                        st.success(f"🎉 Position '{new_title}' added!")
+                        st.success(f"Deployed new vacancy track: {new_title}")
                         st.rerun()
-        with col2:
-            st.markdown("#### 📌 Current Openings")
-            if len(st.session_state.job_positions) > 0:
-                for idx, row in st.session_state.job_positions.iterrows():
-                    with st.container():
-                        st.markdown(f'<div class="job-card"><strong>🎯 {row["title"]}</strong><br>{row["description"]}<br>✨ Skills: {row["required_skills"]}<br>⏱️ Min exp: {row["min_experience"]} yrs</div>', unsafe_allow_html=True)
-                        col_a, col_b = st.columns(2)
-                        with col_a:
-                            if st.button(f"✏️ Edit", key=f"edit_{row['id']}"):
-                                st.session_state.edit_id = row['id']
-                                st.session_state.edit_title = row['title']
-                                st.session_state.edit_desc = row['description']
-                                st.session_state.edit_skills = row['required_skills']
-                                st.session_state.edit_exp = row['min_experience']
-                        with col_b:
-                            if st.button(f"🗑️ Delete", key=f"del_{row['id']}"):
-                                st.session_state.job_positions = st.session_state.job_positions[st.session_state.job_positions['id'] != row['id']]
-                                st.rerun()
-                if 'edit_id' in st.session_state:
-                    st.markdown("---")
-                    st.subheader(f"✏️ Editing: {st.session_state.edit_title}")
-                    new_title = st.text_input("Title", value=st.session_state.edit_title)
-                    new_desc = st.text_area("Description", value=st.session_state.edit_desc)
-                    new_skills = st.text_input("Skills", value=st.session_state.edit_skills)
-                    new_exp = st.number_input("Experience", value=int(st.session_state.edit_exp))
-                    if st.button("💾 Save Changes"):
-                        idx = st.session_state.job_positions[st.session_state.job_positions['id'] == st.session_state.edit_id].index[0]
-                        st.session_state.job_positions.at[idx, 'title'] = new_title
-                        st.session_state.job_positions.at[idx, 'description'] = new_desc
-                        st.session_state.job_positions.at[idx, 'required_skills'] = new_skills
-                        st.session_state.job_positions.at[idx, 'min_experience'] = new_exp
-                        del st.session_state.edit_id
-                        st.rerun()
-            else:
-                st.info("No job positions yet. Click the '+' above to add one.")
-    
+        with col_right:
+            st.markdown("#### Active Target Vectors")
+            for idx, row in st.session_state.job_positions.iterrows():
+                st.markdown(
+                    f"""
+                    <div style='background: rgba(0,0,0,0.4); border: 1px solid #ffcc00; padding: 12px; border-radius:15px; margin-bottom:10px;'>
+                        <strong>🎯 {row['title']}</strong><br>
+                        <small style='color:#bbb;'>Skills: {row['required_skills']}</small>
+                    </div>
+                    """, unsafe_allow_html=True
+                )
+                if st.button("🗑️ Terminate Track", key=f"del_{row['id']}"):
+                    st.session_state.job_positions = st.session_state.job_positions[st.session_state.job_positions['id'] != row['id']]
+                    st.rerun()
+
+    # TAB 2: ACTIVE PARSING GATEWAY
     with tabs[1]:
-        st.subheader("📄 CV Screening Portal")
-        st.markdown("<div style='background:rgba(0,0,0,0.5); border-radius:20px; padding:15px;'><span class='badge-cartoon'>⚡ Upload CV</span> <span class='badge-cartoon'>🎯 Get Match Score</span> <span class='badge-cartoon'>📧 Automatic Recording</span></div>", unsafe_allow_html=True)
-        applicant_name = st.text_input("👤 Applicant Full Name")
-        applicant_email = st.text_input("📧 Applicant Email")
-        uploaded_cv = st.file_uploader("📎 Upload CV (PDF, DOCX, TXT)", type=["pdf", "docx", "txt"])
-        job_options = st.session_state.job_positions['title'].tolist()
-        selected_job = st.selectbox("🎯 Select Target Job", job_options) if job_options else None
+        st.subheader("📄 Automated Screening Portal")
+        app_name = st.text_input("Candidate Full Legal Identity Name")
+        app_email = st.text_input("Communication Channel Email")
+        uploaded_cv = st.file_uploader("Drop CV Asset File Here (PDF, DOCX, TXT)", type=["pdf", "docx", "txt"])
+        job_list = st.session_state.job_positions['title'].tolist()
+        target_job = st.selectbox("Assign Evaluation Objective Vector", job_list) if job_list else None
         
-        if st.button("🔍 Analyse CV & Score") and uploaded_cv and applicant_name and selected_job:
-            with st.spinner("✨ Scanning CV with smart algorithm..."):
+        if st.button("🔍 INITIATE ALGORITHMIC ANALYSIS") and uploaded_cv and app_name and target_job:
+            with st.spinner("Executing sequence parsing algorithms..."):
                 cv_text = extract_cv_text(uploaded_cv)
-                if cv_text and len(cv_text) > 50:
-                    job_row = st.session_state.job_positions[st.session_state.job_positions['title'] == selected_job].iloc[0]
-                    score = compute_match_score(cv_text, job_row['required_skills'], job_row['description'])
-                    new_app = pd.DataFrame({
-                        "applicant_name": [applicant_name],
-                        "email": [applicant_email],
-                        "job_title": [selected_job],
-                        "score": [score],
-                        "cv_text_preview": [cv_text[:500] + "..."],
+                if len(cv_text) > 10:
+                    job_data = st.session_state.job_positions[st.session_state.job_positions['title'] == target_job].iloc[0]
+                    match_score = compute_match_score(cv_text, job_data['required_skills'], job_data['description'])
+                    
+                    new_entry = pd.DataFrame({
+                        "applicant_name": [app_name], "email": [app_email], "job_title": [target_job],
+                        "score": [match_score], "cv_text_preview": [cv_text[:500] + "..."],
                         "date": [datetime.now().strftime("%Y-%m-%d %H:%M")]
                     })
-                    st.session_state.applications = pd.concat([st.session_state.applications, new_app], ignore_index=True)
+                    st.session_state.applications = pd.concat([st.session_state.applications, new_entry], ignore_index=True)
                     st.balloons()
-                    st.success(f"✅ Match Score: {score}%")
-                    if score >= 70:
-                        st.markdown(f'<p class="score-high">🌟 TOP CANDIDATE – {score}% match</p>', unsafe_allow_html=True)
-                    elif score >= 50:
-                        st.markdown(f'<p class="score-medium">📌 Potential – {score}% match</p>', unsafe_allow_html=True)
-                    else:
-                        st.markdown(f'<p class="score-low">❌ Low compatibility – {score}%</p>', unsafe_allow_html=True)
-                    st.info("📨 Application stored. An email notification would be sent to both applicant and admin.")
+                    st.metric(label="Match Quality Output Matrix", value=f"{match_score}%")
                 else:
-                    st.error("Could not read CV text. Try a clearer file.")
-        elif not selected_job:
-            st.warning("👉 First, create job positions in the previous tab.")
-    
+                    st.error("Error: Processing framework could not capture standard document body data strings.")
+
+    # TAB 3: SYSTEM HISTOGRAMS & ANALYTICS
     with tabs[2]:
-        st.subheader("📋 All Applications")
+        st.subheader("📊 Performance Matrix & Database Analytics")
         if len(st.session_state.applications) > 0:
             st.dataframe(st.session_state.applications[["applicant_name", "email", "job_title", "score", "date"]], use_container_width=True)
-            csv = st.session_state.applications.to_csv(index=False)
-            st.download_button("📥 Download CSV Report", data=csv, file_name="applications.csv")
-            selected_app = st.selectbox("🔍 View CV preview", st.session_state.applications['applicant_name'].tolist())
-            app_row = st.session_state.applications[st.session_state.applications['applicant_name'] == selected_app].iloc[0]
-            st.text_area("CV Text Preview", app_row['cv_text_preview'], height=200)
+            csv_data = st.session_state.applications.to_csv(index=False)
+            st.download_button("📥 Extraction Database Log Dump (CSV)", data=csv_data, file_name="screening_report.csv")
         else:
-            st.info("No applications yet. Upload some CVs to see magic happen.")
-    
-    with tabs[3]:
-        st.subheader("📧 Seamless Integration")
-        st.markdown("""
-        <div style="background: rgba(255,215,0,0.2); border-radius: 20px; padding: 1rem;">
-        <p>✅ <strong>Direct CV upload via this portal</strong> – instant scoring and storage.<br>
-        ✅ <strong>Admin email:</strong> deslandes78@gmail.com – you will be notified of each new application.<br>
-        ✅ <strong>Advanced option:</strong> Connect your Gmail/Outlook to auto‑fetch CV attachments. Contact us for custom setup.<br>
-        🎯 <strong>Pricing:</strong> Full software license – $299 USD. One‑time payment, lifetime updates.
-        </p>
-        </div>
-        """, unsafe_allow_html=True)
-        st.info("📩 For custom email integration or purchase inquiry, email deslandes78@gmail.com or WhatsApp (509) 4738-5663.")
-    
-    st.markdown("---")
-    st.markdown("<div style='text-align:center;'><span>🎈</span> <span>© 2025 GlobalInternet.py – Built by Gesner Deslandes</span> <span>🎈</span></div>", unsafe_allow_html=True)
-    st.markdown("<div style='text-align:center;'><span class='badge-cartoon'>🚀 Hire smarter, not harder</span></div>", unsafe_allow_html=True)
+            st.info("System logging nodes are current listening. Run analysis tasks to build database tracks.")
 
+    # TAB 4: EXTENDED CUSTOM SERVICES
+    with tabs[3]:
+        st.subheader("📧 Webhook & Corporate Mail Integration")
+        st.markdown(
+            """
+            <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; border-left: 5px solid #ffcc00;">
+                <h4>✨ Enterprise Extensions Available</h4>
+                <p>Need direct IMAP routing to pull attachments instantly out of your incoming corporate email loops? We build fully isolated custom microservices to feed your parsing pool dynamically.</p>
+                <strong>Inquire via support arrays:</strong> deslandes78@gmail.com
+            </div>
+            """, unsafe_allow_html=True
+        )
+
+# --- EXECUTION ROOT ---
 if not st.session_state.authenticated:
-    login()
+    show_powerful_sales_ad()
 else:
-    main_app()
+    show_main_dashboard()
