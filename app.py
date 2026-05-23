@@ -73,16 +73,16 @@ st.markdown(
         background: linear-gradient(90deg, #ffcc00, #ff6600) !important;
         color: #000000 !important;
         font-weight: 900 !important;
-        font-size: 1.3rem !important;
+        font-size: 1.1rem !important;
         border-radius: 50px !important;
-        border: 3px solid #ffffff !important;
-        box-shadow: 0 8px 0px #cc4400 !important;
-        padding: 12px 35px !important;
+        border: 2px solid #ffffff !important;
+        box-shadow: 0 5px 0px #cc4400 !important;
+        padding: 8px 25px !important;
         transition: all 0.1s ease-in-out;
     }
     .stButton button:hover {
-        transform: translateY(3px) !important;
-        box-shadow: 0 4px 0px #cc4400 !important;
+        transform: translateY(2px) !important;
+        box-shadow: 0 3px 0px #cc4400 !important;
         background: linear-gradient(90deg, #ffea00, #ff3300) !important;
     }
     h1, h2, h3, h4, p, span, label {
@@ -96,6 +96,14 @@ st.markdown(
         padding: 15px;
         border-radius: 20px;
         border: 2px solid #ff9900;
+    }
+    .vector-card {
+        background: rgba(0,0,0,0.5) !important;
+        border: 2px solid #ffcc00 !important;
+        border-radius: 20px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
     </style>
     """,
@@ -231,9 +239,9 @@ def show_main_dashboard():
     # TAB 1: JOB VACANCY ENGINE
     with tabs[0]:
         st.subheader("📋 Core Structural Openings")
-        col_left, col_right = st.columns([2,1])
+        col_left, col_right = st.columns([1, 1])
         with col_left:
-            with st.expander("➕ Provision New Position Profile"):
+            with st.expander("➕ Provision New Position Profile", expanded=True):
                 new_title = st.text_input("Official Title")
                 new_desc = st.text_area("Scope of Operations / Description")
                 new_skills = st.text_input("Target Skills Matrix (Comma Separated Keyphrases)")
@@ -249,19 +257,24 @@ def show_main_dashboard():
                         st.success(f"Deployed new vacancy track: {new_title}")
                         st.rerun()
         with col_right:
-            st.markdown("#### Active Target Vectors")
-            for idx, row in st.session_state.job_positions.iterrows():
-                st.markdown(
-                    f"""
-                    <div style='background: rgba(0,0,0,0.4); border: 1px solid #ffcc00; padding: 12px; border-radius:15px; margin-bottom:10px;'>
-                        <strong>🎯 {row['title']}</strong><br>
-                        <small style='color:#bbb;'>Skills: {row['required_skills']}</small>
-                    </div>
-                    """, unsafe_allow_html=True
-                )
-                if st.button("🗑️ Terminate Track", key=f"del_{row['id']}"):
-                    st.session_state.job_positions = st.session_state.job_positions[st.session_state.job_positions['id'] != row['id']]
-                    st.rerun()
+            st.markdown("#### 📌 Active Target Vectors")
+            if len(st.session_state.job_positions) > 0:
+                for idx, row in st.session_state.job_positions.iterrows():
+                    st.markdown(
+                        f"""
+                        <div class="vector-card">
+                            <h3 style="margin-top:0; color:#ffcc00 !important; font-size:1.3rem;">🎯 {row['title']}</h3>
+                            <p style="margin:5px 0; font-size:0.95rem;"><strong>📋 Description:</strong> {row['description']}</p>
+                            <p style="margin:5px 0; font-size:0.95rem;"><strong>✨ Required Skills:</strong> {row['required_skills']}</p>
+                            <p style="margin:5px 0; font-size:0.95rem;"><strong>⏱️ Min Experience:</strong> {row['min_experience']} years</p>
+                        </div>
+                        """, unsafe_allow_html=True
+                    )
+                    if st.button("🗑️ Terminate Track", key=f"del_{row['id']}"):
+                        st.session_state.job_positions = st.session_state.job_positions[st.session_state.job_positions['id'] != row['id']]
+                        st.rerun()
+            else:
+                st.info("No active job positions setup. Complete the configuration profile form on the left.")
 
     # TAB 2: ACTIVE PARSING GATEWAY
     with tabs[1]:
