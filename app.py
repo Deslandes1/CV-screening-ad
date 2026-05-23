@@ -1,39 +1,3 @@
-The core reason your Streamlit deployment isn't loading correctly is hidden right at the very end of your provided code snippet:
-
-```python
-/[     UTC     ] Logs for cv-screening-ad-s2yaqezapp6nm5k6mvenv5r.streamlit.app/
-...
-
-```
-
-You accidentally pasted Streamlit Community Cloud log data and file paths directly into the bottom of your Python script! Because `/[  UTC  ]...` is invalid syntax in Python, it causes a `SyntaxError` immediately when Streamlit tries to execute the file.
-
-### How to Fix It
-
-1. Open your `app.py` file.
-2. Scroll all the way down to the very bottom.
-3. Remove everything *after* the final line of your script:
-```python
-
-```
-
-
-
-else:
-main_app()
-
-```
-4. Save the file and push the changes back to your GitHub repository.
-
----
-
-### Cleaned & Optimized `app.py` Code
-
-Here is the fully cleaned up code with the trailing logs removed. I also squashed a subtle hidden bug in your file handling: Streamlit's `file_uploader` yields a file-like object that requires you to handle `read()` operations safely without double-consuming the buffer. 
-
-Copy and paste this exact block into your `app.py`:
-
-```python
 import streamlit as st
 import pandas as pd
 import io
@@ -217,7 +181,6 @@ def extract_text_from_txt(file_bytes):
         return ""
 
 def extract_cv_text(uploaded_file):
-    # Read bytes once so buffer remains healthy
     file_bytes = uploaded_file.getvalue()
     if uploaded_file.type == "application/pdf":
         return extract_text_from_pdf(file_bytes)
@@ -406,5 +369,3 @@ if not st.session_state.authenticated:
     login()
 else:
     main_app()
-
-```
